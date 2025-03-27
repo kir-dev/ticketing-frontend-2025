@@ -1,19 +1,23 @@
 import './App.css'
-import {GeoItem} from "./geo-data.tsx";
-import {useWeather} from "./use-weather.ts";
+import {Text, VStack} from "@chakra-ui/react";
+import {BoardListItem} from "./board-list-item.tsx";
+import {CreateBoardForm} from "./create-board-form.tsx";
+import {useBoardList} from "./use-board-list.ts";
 
 function App() {
-    const weather = useWeather()
-
-    if(weather.isLoading) return <p>Loading...</p>;
-
-    if(weather.error) return <p>{weather.error.message}</p>;
-
-    if(!weather.data) return null
+    const boardListQuery = useBoardList()
 
     return <main>
-        <h1>Weather</h1>
-        {weather.data.map((c)=><GeoItem key={c.name} data={c}/>)}
+        <VStack>
+            <Text textStyle="2xl">Boards</Text>
+            <CreateBoardForm/>
+            {boardListQuery.data?.map(item=>
+                <BoardListItem
+                    key={item.id}
+                    board={item}
+                />
+            )}
+        </VStack>
     </main>
 }
 
